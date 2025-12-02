@@ -4,7 +4,7 @@ import com.everton.planner.DayOfWeekEnum.DayOfWeekEnum;
 import com.everton.planner.dto.ScheduleEntryDTO;
 import com.everton.planner.model.ScheduleEntry;
 import io.quarkus.hibernate.orm.panache.Panache;
-import jakarta.inject.Inject;
+
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -14,28 +14,26 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
-
 
 @Path("/api/schedule")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ScheduleResource {
-    @Inject
-    ScheduleEntry  ScheduleEntry;
+
 
     @GET
-    public List<ScheduleEntryDTO> listAll(){
+    public List<ScheduleEntryDTO> listAll() {
         return ScheduleEntry.<ScheduleEntry>listAll()
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
 
     }
+
     @GET
     @Path("/day/{day}")
-    public List<ScheduleEntryDTO> listByDay(@PathParam("day")DayOfWeekEnum day){
-        return ScheduleEntry.<ScheduleEntry>list("dayOfWeek",day)
+    public List<ScheduleEntryDTO> listByDay(@PathParam("day") DayOfWeekEnum day) {
+        return ScheduleEntry.<ScheduleEntry>list("dayOfWeek", day)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
@@ -97,8 +95,6 @@ public class ScheduleResource {
                 .executeUpdate();
         return Response.noContent().build();
     }
-
-
 
 
     private ScheduleEntryDTO toDTO(ScheduleEntry entry) {

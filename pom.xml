@@ -41,10 +41,10 @@
             <artifactId>quarkus-hibernate-orm-panache</artifactId>
         </dependency>
 
-        <!-- PostgreSQL -->
+        <!-- MYSQL -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-postgresql</artifactId>
+            <artifactId>quarkus-jdbc-mysql</artifactId>
         </dependency>
 
         <!-- Dev tools -->
