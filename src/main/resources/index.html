@@ -95,13 +95,14 @@
         });
         return map;
     }
+    const apiUrl = (path) => new URL(path, window.location.href).toString();
 
     async function loadSchedule() {
         const tbody = document.querySelector("#schedule-table tbody");
         tbody.innerHTML = "<tr><td colspan='4'>Carregando...</td></tr>";
 
         try {
-            const resp = await fetch("/api/schedule");
+            const resp = await fetch(apiUrl("api/schedule"));
             if (!resp.ok) {
                 throw new Error(`Erro ao buscar agenda: ${resp.status}`);
             }
@@ -163,14 +164,14 @@
     }
 
     async function toggleCheck(id) {
-        await fetch(`/api/schedule/${id}/toggle`, {
+        await fetch(apiUrl(`api/schedule/${id}/toggle`), {
             method: "PATCH"
         });
         await loadSchedule();
     }
 
     async function resetChecks() {
-        await fetch("/api/schedule/reset", {
+        await fetch(apiUrl("api/schedule/reset"), {
             method: "POST"
         });
         await loadSchedule();

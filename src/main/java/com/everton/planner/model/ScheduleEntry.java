@@ -2,16 +2,18 @@ package com.everton.planner.model;
 
 
 import com.everton.planner.DayOfWeekEnum.DayOfWeekEnum;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
+
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "schedule_entries")
-public class ScheduleEntry extends PanacheEntity {
+public class ScheduleEntry extends PanacheEntityBase {
 
-
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
     @Enumerated(EnumType.STRING)
     @Column(name = "day_of_week", nullable = false)
     private DayOfWeekEnum dayOfWeek;
