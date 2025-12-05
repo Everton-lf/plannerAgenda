@@ -2,7 +2,7 @@ package com.everton.planner.DayOfWeekEnum;
 
 public enum DayOfWeekEnum {
     SEGUNDA,
-    TERÇA,
+    TERCA,
     QUARTA,
     QUINTA,
     SEXTA,

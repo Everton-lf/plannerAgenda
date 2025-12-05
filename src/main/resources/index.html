@@ -100,50 +100,66 @@
         const tbody = document.querySelector("#schedule-table tbody");
         tbody.innerHTML = "<tr><td colspan='4'>Carregando...</td></tr>";
 
-        const resp = await fetch("/api/schedule");
-        const data = await resp.json();
-
-        const grouped = groupByDay(data);
-        tbody.innerHTML = "";
-
-        dayOrder.forEach(day => {
-            const entries = grouped[day] || [];
-            if (entries.length === 0) {
-                return;
+        try {
+            const resp = await fetch("/api/schedule");
+            if (!resp.ok) {
+                throw new Error(`Erro ao buscar agenda: ${resp.status}`);
             }
-            entries.forEach((entry, index) => {
-                const tr = document.createElement("tr");
-                if (index === 0) {
-                    const tdDay = document.createElement("td");
-                    tdDay.className = "day-header";
-                    tdDay.textContent = day;
-                    tdDay.rowSpan = entries.length;
-                    tr.appendChild(tdDay);
+            const data = await resp.json();
+
+                const grouped = groupByDay(data);
+            tbody.innerHTML = "";
+
+                  let rendered = false;
+            dayOrder.forEach(day => {
+                const entries = grouped[day] || [];
+                if (entries.length === 0) {
+                    return;
                 }
 
-                const tdTime = document.createElement("td");
-                tdTime.textContent = entry.timeRange;
+                       rendered = true;
+                entries.forEach((entry, index) => {
+                    const tr = document.createElement("tr");
+                    if (index === 0) {
+                        const tdDay = document.createElement("td");
+                        tdDay.className = "day-header";
+                        tdDay.textContent = day;
+                        tdDay.rowSpan = entries.length;
+                        tr.appendChild(tdDay);
+                    }
 
-                const tdDesc = document.createElement("td");
-                tdDesc.textContent = entry.description;
-                if (entry.completed) {
-                    tdDesc.classList.add("completed");
-                }
+                    const tdTime = document.createElement("td");
+                    tdTime.textContent = entry.timeRange;
 
-                const tdCheck = document.createElement("td");
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.checked = entry.completed;
-                checkbox.addEventListener("change", () => toggleCheck(entry.id));
-                tdCheck.appendChild(checkbox);
+                    const tdDesc = document.createElement("td");
+                    tdDesc.textContent = entry.description;
+                    if (entry.completed) {
+                        tdDesc.classList.add("completed");
+                    }
 
-                tr.appendChild(tdTime);
-                tr.appendChild(tdDesc);
-                tr.appendChild(tdCheck);
+                    const tdCheck = document.createElement("td");
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.checked = entry.completed;
+                    checkbox.addEventListener("change", () => toggleCheck(entry.id));
+                    tdCheck.appendChild(checkbox);
 
-                tbody.appendChild(tr);
+                    tr.appendChild(tdTime);
+                    tr.appendChild(tdDesc);
+                    tr.appendChild(tdCheck);
+
+                    tbody.appendChild(tr);
+                });
             });
-        });
+
+            if (!rendered) {
+                tbody.innerHTML = "<tr><td colspan='4'>Nenhuma atividade cadastrada.</td></tr>";
+            }
+        } catch (err) {
+            console.error(err);
+            tbody.innerHTML = `<tr><td colspan='4'>Falha ao carregar: ${err.message}</td></tr>`;
+        }
+
     }
 
     async function toggleCheck(id) {

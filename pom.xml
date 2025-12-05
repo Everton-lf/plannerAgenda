@@ -41,6 +41,14 @@
             <artifactId>quarkus-hibernate-orm-panache</artifactId>
         </dependency>
 
+        <!-- H2 for lightweight dev/test runs -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+
         <!-- MYSQL -->
         <dependency>
             <groupId>io.quarkus</groupId>

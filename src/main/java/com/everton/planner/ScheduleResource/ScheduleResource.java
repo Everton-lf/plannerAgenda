@@ -74,18 +74,18 @@ public class ScheduleResource {
         return Response.ok(toDTO(entry)).build();
     }
 
-//    @PATCH
-//    @Path("/{id}/toggle")
-//    @Transactional
-//    public Response toggleCompleted(@PathParam("id") Long id) {
-//        ScheduleEntry entry = ScheduleEntry.findById(id);
-//        if (entry == null) {
-//            throw new NotFoundException("Schedule entry not found");
-//        }
-//        entry.completed = !entry.completed;
-//        return Response.ok(toDTO(entry)).build();
-//    }
+    @PATCH
+    @Path("/{id}/toggle")
+    @Transactional
+    public Response toggleCompleted(@PathParam("id") Long id) {
+        ScheduleEntry entry = ScheduleEntry.findById(id);
+        if (entry == null) {
+            throw new NotFoundException("Schedule entry not found");
+        }
 
+        entry.setCompleted(!entry.isCompleted());
+        return Response.ok(toDTO(entry)).build();
+    }
     @POST
     @Path("/reset")
     @Transactional
